@@ -51,7 +51,7 @@ module.exports = {
       throw new Error(
         'Plugin "' +
           name +
-          '" does\'t exist in _plugins but in _byName. This seems to be a bug of js-plugin.',
+          '" does\'t exist in _plugins but in _byName. This seems to be a bug of js-plugin.'
       );
     _cache = {};
     _plugins = _plugins.slice();
@@ -98,5 +98,5 @@ module.exports = {
       }
       return null;
     });
-  },
+  }
 };
