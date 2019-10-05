@@ -61,4 +61,18 @@ expect(plugin.getPlugins().map(p => p.name)).to.deep.equal(['p1', 'p3']);
 plugin.register({ name: 'p5' });
 expect(plugin.getPlugins().map(p => p.name)).to.deep.equal(['p1', 'p3', 'p4', 'p5']);
 
+// Should not be able to register same name plugin
+try {
+  plugin.register({ name: 'p1' });
+} catch (e) {
+  expect(e).to.be.an('error');
+}
+
+// Should not be able to unregister a plugin that not exist
+try {
+  plugin.unregister(p0);
+} catch (e) {
+  expect(e).to.be.an('error');
+}
+
 console.log('Test success.');
