@@ -1,0 +1,12 @@
+{
+  "name": "js-plugin",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "eslint": "^6.4.0"
+  },
+  "dependencies": {}
+}
