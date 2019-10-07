@@ -59,7 +59,7 @@ plugin.register({ name: 'p4', deps: ['p5'] });
 expect(plugin.getPlugins().map(p => p.name)).to.deep.equal(['p1', 'p3']);
 
 plugin.register({ name: 'p5' });
-expect(plugin.getPlugins().map(p => p.name)).to.deep.equal(['p1', 'p3', 'p4', 'p5']);
+expect(plugin.getPlugins().map(p => p.name)).to.deep.equal(['p1', 'p3', 'p5', 'p4']);
 
 // Should not be able to register same name plugin
 try {
@@ -79,5 +79,33 @@ try {
 const arr = [{ name: '0', order: 0 }, { name: '10', order: 10 }, { name: '5', order: 5 }];
 plugin.sort(arr);
 expect(arr.map(o => o.name)).to.deep.equal(['0', '5', '10']);
+
+// Plugins should be sorted by deps
+const d1 = { name: 'd1', deps: ['d2'] };
+const d2 = { name: 'd2', deps: [] };
+const d3 = { name: 'd3', deps: ['d4', 'd5'] };
+const d4 = { name: 'd4', deps: ['d5'] };
+const d5 = { name: 'd5', deps: [] };
+
+plugin.register(d1);
+plugin.register(d2);
+plugin.register(d3);
+plugin.register(d4);
+plugin.register(d5);
+
+expect(
+  plugin
+    .getPlugins()
+    .filter(p => p.name.startsWith('d'))
+    .map(p => p.name)
+).to.deep.equal(['d2', 'd1', 'd5', 'd4', 'd3']);
+
+// Performance benchmak: register 1000 plugins should take less than 100ms
+const time1 = Date.now();
+for (let i = 0; i < 1000; i++) {
+  plugin.register({ name: 'name' + i, deps: ['n1', 'n2', 'n3', 'n4'] });
+}
+const time2 = Date.now();
+expect(time2 - time2).to.below(100);
 
 console.log('Test success.');

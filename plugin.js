@@ -36,7 +36,13 @@ module.exports = {
     }
     _cache = {};
     _plugins = _plugins.slice();
-    _plugins.push(p);
+    var pos = _plugins.length;
+    _plugins.forEach((p2, i) => {
+      if (p2.deps && p2.deps.indexOf(p.name) >= 0) {
+        pos = Math.min(pos, i);
+      }
+    });
+    _plugins.splice(pos, 0, p);
     _byName[p.name] = p;
     if (p.initialize) {
       p.initialize();
