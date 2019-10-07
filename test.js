@@ -8,14 +8,14 @@ const p1 = {
     form: {
       processMeta(meta) {
         meta.push('m1');
-      },
-    },
-  },
+      }
+    }
+  }
 };
 
 const p2 = {
   name: 'p2',
-  foo: 'bar2',
+  foo: 'bar2'
 };
 
 const p3 = {
@@ -25,9 +25,9 @@ const p3 = {
     form: {
       processMeta(meta) {
         meta.push('m3');
-      },
-    },
-  },
+      }
+    }
+  }
 };
 
 plugin.register(p1);
@@ -74,5 +74,10 @@ try {
 } catch (e) {
   expect(e).to.be.an('error');
 }
+
+// Test sort helper
+const arr = [{ name: '0', order: 0 }, { name: '10', order: 10 }, { name: '5', order: 5 }];
+plugin.sort(arr);
+expect(arr.map(o => o.name)).to.deep.equal(['0', '5', '10']);
 
 console.log('Test success.');

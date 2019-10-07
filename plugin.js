@@ -98,5 +98,14 @@ module.exports = {
       }
       return null;
     });
+  },
+  sort: function(arr, sortProp) {
+    // A helper method to sort an array according to 'order' (or by sortProp) property of the array element.
+    sortProp = sortProp || 'order';
+    arr.sort((a, b) => {
+      var order1 = a.hasOwnProperty(sortProp) ? a[sortProp] : 1000000;
+      var order2 = b.hasOwnProperty(sortProp) ? b[sortProp] : 1000000;
+      return order1 - order2;
+    });
   }
 };
