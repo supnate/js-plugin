@@ -12,6 +12,8 @@ Note that every plugin in the system maybe not bundled separatly but just a logi
 ## Example 1: Menu
 Menu is used to navigate among functions of an application. Whenever you add a new feature, it may need a menu item in the menu. Say that we have a menu component like below (from Github settings page):
 
+<img src="./images/menu.png?raw=true" />
+
 ```js
 import React from 'react';
 
@@ -53,7 +55,53 @@ return (
 
 Essentially the menu item is a part of feature of 'block user'. All the logic of the feature should be only in the scope of the feature itself while the Menu is just a pure presentation component which is only responsible for navigation without knowing about other business logic.
 
-So we need to make `Menu` extensible, that is it allows to register menu items. Below is how we do it using `js-plugin`.
+So we need to make `Menu` extensible, that is it allows to register menu items. Below is how we do it using `js-plugin`:
+
+### Menu.js
+```js
+import React from "react";
+import plugin from "js-plugin";
+
+export default function Menu() {
+  const menuItems = ["Profile", "Account", "Security"];
+  plugin.invoke("menu.processMenuItems", menuItems);
+  return (
+    <div>
+      <h3>Personal Settings</h3>
+      <ul>
+        {menuItems.map(mi => (
+          <li key={mi}>{mi}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+```
+Here `Menu` component defines an extension point named `menu.processMenuItems` and passes `menuItems` as an argument. Then every plugin could use this extension point to extend menu items. See below plugin sample about how to consume the extension point.
+
+### plugin1.js
+```js
+import { Button } from "antd";
+import plugin from "js-plugin";
+
+plugin.register({
+  name: "plugin1",
+  menu: {
+    processMenuItems(items) {
+      items.push("Blocked users");
+    },
+  },
+});
+```
+
+Here `plugin1` is a plugin that contributes a menu item `Blocked users` to `Menu` component. By this approach, `Menu` component no longer cares about any business logic.
+
+Here is the extended menu with `Blocked users`:
+
+<img src="./images/menu2.png?raw=true" />
+
+
 ## Example 2: Form
 
 # Extension Points
