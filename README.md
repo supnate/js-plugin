@@ -12,7 +12,7 @@ Note that every plugin in the system maybe not bundled separatly but just a logi
 ## Example 1: Menu
 Menu is used to navigate among functions of an application. Whenever you add a new feature, it may need a menu item in the menu. Say that we have a menu component like below (from Github settings page):
 
-<img src="./images/menu.png?raw=true" />
+<img src="./images/menu.png?raw=true" width="250" />
 
 ```js
 import React from 'react';
@@ -99,10 +99,13 @@ Here `plugin1` is a plugin that contributes a menu item `Blocked users` to `Menu
 
 Here is the extended menu with `Blocked users`:
 
-<img src="./images/menu2.png?raw=true" />
-
+<img src="./images/menu2.png" width="250" />
 
 ## Example 2: Form
+Form is used to display detail information of a business object. It may become much complicated when more and more features added. Take user profile example. A form may looks like:
+<img src="./images/form.png" width="350" />
+
+
 
 # Extension Points
 
