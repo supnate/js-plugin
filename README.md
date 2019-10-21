@@ -7,7 +7,7 @@
 # Motivation
 Web applications are becoming more and more complicated nowadays. To separate concerns, decouple business logic, a large application should be well designed. One of best practices is plugin based architecture. Whenever you add a new feature, it should not add much complication to the system so that the project could be always maintainable when it grows.
 
-Note that every plugin in the system maybe not bundled separatly but just a logical plugin. Below I give two cases about the advantages of plugin based architecture.
+Note that every plugin in the system maybe not bundled separatly but just a logical plugin. Below I give two cases to show the advantages of plugin based architecture.
 
 ## Example 1: Menu
 Menu is used to navigate among functions of an application. Whenever you add a new feature, it may need a menu item in the menu. Say that we have a menu component like below (from Github settings page):
@@ -28,7 +28,7 @@ export default function Menu() {
 }
 ```
 
-Now we need to add a new feature to block users. It needs a menu item named 'Blocked users'. Normallly we need to change `Menu` component:
+Now we need to add a new feature to allow to block users. It needs a menu item named 'Blocked users' in settings page. Normallly we need to change `Menu` component:
 ```js
 return (
   <ul>
@@ -40,7 +40,7 @@ return (
 );
 ```
 
-It looks quite intuitive but it's not extensible. Whenever we add features to the application, we need to change Menu component and finally it will become too complicated to maintain. Especially the menu item is dynamically like it needs to be show or no show according to permission. We have to embed the permission logic in Menu component. For example: if the block user feature is only available for premium users:
+It looks quite intuitive but it's not extensible. Whenever we add features to the application, we need to change `Menu` component and finally it will become too complicated to maintain. Especially if the menu item is dynamically like it needs to be show or not to show according to the permission. We have to embed the permission logic in `Menu` component. For example: if the block user feature is only available for premium users:
 
 ```js
 return (
@@ -53,7 +53,7 @@ return (
 );
 ```
 
-Essentially the menu item is a part of feature of 'block user'. All the logic of the feature should be only in the scope of the feature itself while the Menu is just a pure presentation component which is only responsible for navigation without knowing about other business logic.
+Essentially the menu item is a part of feature of `block user`. All the logic of the feature should be only in the scope of the feature itself while the `Menu` is just a pure presentation component which is only responsible for navigation without knowing about other business logic.
 
 So we need to make `Menu` extensible, that is it allows to register menu items. Below is how we do it using `js-plugin`:
 
@@ -102,7 +102,7 @@ Here is the extended menu with `Blocked users`:
 <img src="./images/menu2.png" width="250" />
 
 ## Example 2: Form
-Form is used to display detail information of a business object. It may become much complicated when more and more features added. Take user profile example. A form may looks like:
+Form is used to display detail information of a business object. It may become much complicated when more and more features added. Take user profile example. A form may look like:
 
 <img src="./images/form.png" width="700" />
 
@@ -142,7 +142,7 @@ export default () => {
 };
 ```
 
-Still take `block user` feature as example, when you open an user profile, we need to add a field named `Blocked` to show block status of the user to you. Without plugin mechanism, we need to update `UserProfile` component to add this field. Obviously it will add complexity to `UserProfile` component and it makes code less maintainable because code of the feature is distributed in different places. Now let's use the same approach as `Menu` example, we allow plugins to modify form meta by `js-plugin`:
+Still take `block user` feature for example, when you open an user profile, we need to add a field named `Blocked` to show block status of the user to you. Without plugin mechanism, we need to update `UserProfile` component to add this field. Obviously it will add complexity to `UserProfile` component and it makes code less maintainable because code of the feature is distributed in different places. Now let's use the same approach as `Menu` example, we allow plugins to modify form meta by `js-plugin`:
 
 ### UserProfile.js
 ```js
@@ -182,7 +182,7 @@ export default () => {
 };
 ```
 
-We can see we defined an extension point named `profile.processMeta` in `UserProfile` component, then we can comsume this extension point in plugin:
+We can see we defined an extension point named `profile.processMeta` in `UserProfile` component, then we can comsume this extension point in a plugin:
 
 ### plugin1.js
 ```js
@@ -212,9 +212,9 @@ Then we got the UI as below:
 
 <img src="./images/form2.png" width="700" />
 
-From above two examples, we see how we use `js-plugin` to keep all releated code in one place, whenever we add a new feature, we will not add complexity to either `Menu` or `UserProfile` component.
+From above two examples, we see how we use `js-plugin` to keep all releated code in one place, whenever we add a new feature, we will not add complexity to either `Menu` or `UserProfile` component. That is we don't need to change `Menu` or `UserProfile` components.
 
-You can see example code at:
+You can see the live example at:
 
 [![Edit js-plugin-examples](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/js-plugin-examples-dxh3b?fontsize=14)
 
@@ -341,6 +341,18 @@ plugin.sort(menuItems);
 // ]
 ```
 The array is sorted by order property accendingly and if no order property it will be in the end.
+
+# Bundling
+In above examples, plugins are bundled together with the host application. But in real cases plugins maybe bundled separatly. Below is my recommended way:
+
+1. Build Webpack DLL to contain all main application modules.
+2. Build plugin on DLL. Its entry module just registers itself as an plugin.
+3. Build application on DLL.
+
+So the load sequence is:
+App DLL => Plugin-1 => Plugin-2 => ... => Plugin-n => App Bundle
+
+This way is how Rekit plugins work and also it's used in my componay projects. Just work well.
 
 # License
 MIT
