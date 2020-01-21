@@ -84,6 +84,13 @@ module.exports = {
     return _cache[prop];
   },
 
+  processRawPlugins: function(callback) {
+    // This method allows to process _plugins so that it could
+    // do some unified pre-process before application starts.
+    callback(_plugins);
+    _cache = {};
+  },
+
   invoke: function(prop) {
     var args = Array.prototype.slice.call(arguments, 1);
     if (!prop) throw new Error('Invoke on plugin should have prop argument');
