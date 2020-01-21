@@ -76,7 +76,11 @@ try {
 }
 
 // Test sort helper
-const arr = [{ name: '0', order: 0 }, { name: '10', order: 10 }, { name: '5', order: 5 }];
+const arr = [
+  { name: '0', order: 0 },
+  { name: '10', order: 10 },
+  { name: '5', order: 5 }
+];
 plugin.sort(arr);
 expect(arr.map(o => o.name)).to.deep.equal(['0', '5', '10']);
 
@@ -99,6 +103,10 @@ expect(
     .filter(p => p.name.startsWith('d'))
     .map(p => p.name)
 ).to.deep.equal(['d2', 'd1', 'd5', 'd4', 'd3']);
+
+let rawPlugins = null;
+plugin.processRawPlugins(_plugins => (rawPlugins = _plugins.map(p => p.name)));
+expect(rawPlugins).to.deep.equal(['p1', 'p3', 'p5', 'p4', 'd2', 'd1', 'd5', 'd4', 'd3']);
 
 // Performance benchmak: register 1000 plugins should take less than 100ms
 const time1 = Date.now();
