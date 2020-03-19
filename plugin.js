@@ -70,15 +70,17 @@ module.exports = {
 
   getPlugins: function(prop) {
     if (!prop) {
-      return _plugins.filter(p => !p.deps || p.deps.every(dep => !!_byName[dep]));
+      prop = '.';
     }
     if (!_cache[prop]) {
       _cache[prop] = _plugins.filter(p => {
         if (p.deps && p.deps.some(dep => !_byName[dep])) {
           // If deps not exist, then not load it.
+          const notExistDeps = p.deps.filter(dep => !_byName[dep]);
+          console.log(`Plugin ${p.name} is not loaded because its deps do not exist: ${notExistDeps}.`);
           return false;
         }
-        return _has(p, prop);
+        return prop === '.' ? true : _has(p, prop);
       });
     }
     return _cache[prop];
