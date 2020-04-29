@@ -53,6 +53,7 @@ expect(bars2).to.deep.equal(['bar1', 'bar2', 'bar3']);
 // unregister
 plugin.unregister('p2');
 expect(plugin.getPlugins().map(p => p.name)).to.deep.equal(['p1', 'p3']);
+expect(plugin.getPlugin('p2')).to.be.an('undefined');
 
 // If deps not exist, don't load it
 plugin.register({ name: 'p4', deps: ['p5'] });
@@ -60,6 +61,15 @@ expect(plugin.getPlugins().map(p => p.name)).to.deep.equal(['p1', 'p3']);
 
 plugin.register({ name: 'p5' });
 expect(plugin.getPlugins().map(p => p.name)).to.deep.equal(['p1', 'p3', 'p5', 'p4']);
+
+// Unregister a plugin and then re-register
+plugin.unregister('p3');
+expect(plugin.getPlugins().map(p => p.name)).to.deep.equal(['p1', 'p5', 'p4']);
+expect(plugin.getPlugin('p3')).to.be.an('undefined');
+plugin.register(p3);
+expect(plugin.getPlugins().map(p => p.name)).to.deep.equal(['p1', 'p5', 'p4', 'p3']);
+expect(plugin.getPlugin('p3')).to.deep.equal(p3);
+
 
 // Should not be able to register same name plugin
 try {
@@ -106,7 +116,7 @@ expect(
 
 let rawPlugins = null;
 plugin.processRawPlugins(_plugins => (rawPlugins = _plugins.map(p => p.name)));
-expect(rawPlugins).to.deep.equal(['p1', 'p3', 'p5', 'p4', 'd2', 'd1', 'd5', 'd4', 'd3']);
+expect(rawPlugins).to.deep.equal(['p1', 'p5', 'p4', 'p3', 'd2', 'd1', 'd5', 'd4', 'd3']);
 
 // Performance benchmak: register 1000 plugins should take less than 100ms
 const time1 = Date.now();

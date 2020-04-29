@@ -60,6 +60,7 @@ module.exports = {
           '" does\'t exist in _plugins but in _byName. This seems to be a bug of js-plugin.'
       );
     _cache = {};
+    delete _byName[name];
     _plugins = _plugins.slice();
     _plugins.splice(i, 1);
   },
