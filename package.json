@@ -6,7 +6,9 @@
   "scripts": {
     "test": "node test.js"
   },
-  "files": ["plugin.js"],
+  "files": [
+    "plugin.js"
+  ],
   "devDependencies": {
     "chai": "^4.2.0"
   },
