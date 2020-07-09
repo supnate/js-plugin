@@ -78,7 +78,9 @@ module.exports = {
         if (p.deps && p.deps.some(dep => !_byName[dep])) {
           // If deps not exist, then not load it.
           const notExistDeps = p.deps.filter(dep => !_byName[dep]);
-          console.log(`Plugin ${p.name} is not loaded because its deps do not exist: ${notExistDeps}.`);
+          console.log(
+            `Plugin ${p.name} is not loaded because its deps do not exist: ${notExistDeps}.`
+          );
           return false;
         }
         return prop === '.' ? true : _has(p, prop);
@@ -98,7 +100,8 @@ module.exports = {
     var args = Array.prototype.slice.call(arguments, 1);
     if (!prop) throw new Error('Invoke on plugin should have prop argument');
     var noCall = /^!/.test(prop);
-    prop = prop.replace(/^!/, '');
+    var throws = /!$/.test(prop);
+    prop = prop.replace(/^!|!$/, '');
     var arr = prop.split('.');
     arr.pop();
     var obj = arr.join('.');
@@ -110,7 +113,8 @@ module.exports = {
       } catch (err) {
         // When a plugin failed, doesn't break the app
         console.log('Failed to invoke plugin: ' + p.name + '!' + prop);
-        console.log(err);
+        if (throws) throw err;
+        else console.log(err);
       }
       return null;
     });
