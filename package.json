@@ -3,6 +3,9 @@
   "version": "1.0.6",
   "repository": "rekit/js-plugin",
   "main": "plugin.js",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
   "scripts": {
     "test": "node test.js"
   },
