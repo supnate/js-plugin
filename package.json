@@ -1,6 +1,6 @@
 {
   "name": "js-plugin",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "repository": "rekit/js-plugin",
   "main": "plugin.js",
   "publishConfig": {

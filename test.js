@@ -70,7 +70,6 @@ plugin.register(p3);
 expect(plugin.getPlugins().map(p => p.name)).to.deep.equal(['p1', 'p5', 'p4', 'p3']);
 expect(plugin.getPlugin('p3')).to.deep.equal(p3);
 
-
 // Should not be able to register same name plugin
 try {
   plugin.register({ name: 'p1' });
@@ -86,11 +85,7 @@ try {
 }
 
 // Test sort helper
-const arr = [
-  { name: '0', order: 0 },
-  { name: '10', order: 10 },
-  { name: '5', order: 5 }
-];
+const arr = [{ name: '0', order: 0 }, { name: '10', order: 10 }, { name: '5', order: 5 }];
 plugin.sort(arr);
 expect(arr.map(o => o.name)).to.deep.equal(['0', '5', '10']);
 
@@ -118,6 +113,33 @@ let rawPlugins = null;
 plugin.processRawPlugins(_plugins => (rawPlugins = _plugins.map(p => p.name)));
 expect(rawPlugins).to.deep.equal(['p1', 'p5', 'p4', 'p3', 'd2', 'd1', 'd5', 'd4', 'd3']);
 
+
+// Test failure
+plugin.register({
+  name: 'failed',
+  fail() {
+    throw new Error('ext error');
+  }
+});
+
+// Not faile because method not invoked
+plugin.invoke('!fail!');
+
+try {
+  plugin.invoke('fail!');
+} catch(e) {
+  expect(e).to.be.an('error');
+}
+
+try {
+  plugin.config.throws = true;
+  plugin.invoke('fail');
+} catch(e) {
+  expect(e).to.be.an('error');
+}
+
+
+
 // Performance benchmak: register 1000 plugins should take less than 100ms
 const time1 = Date.now();
 for (let i = 0; i < 1000; i++) {
@@ -125,5 +147,6 @@ for (let i = 0; i < 1000; i++) {
 }
 const time2 = Date.now();
 expect(time2 - time2).to.below(100);
+
 
 console.log('Test success.');

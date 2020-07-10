@@ -25,6 +25,7 @@ function _has(obj, prop) {
 }
 
 module.exports = {
+  config: {},
   register: function(p) {
     if (!p.name) {
       console.log('Every plugin should have a name.');
@@ -100,8 +101,8 @@ module.exports = {
     var args = Array.prototype.slice.call(arguments, 1);
     if (!prop) throw new Error('Invoke on plugin should have prop argument');
     var noCall = /^!/.test(prop);
-    var throws = /!$/.test(prop);
-    prop = prop.replace(/^!|!$/, '');
+    var throws = this.config.throws || /!$/.test(prop);
+    prop = prop.replace(/^!|!$/g, '');
     var arr = prop.split('.');
     arr.pop();
     var obj = arr.join('.');
