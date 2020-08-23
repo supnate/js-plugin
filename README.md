@@ -7,7 +7,7 @@
 # Motivation
 Web applications are becoming more and more complicated nowadays. To separate concerns, decouple business logic, a large application should be well designed. One of best practices is plugin based architecture. Whenever you add a new feature, it should not add much complication to the system so that the project could be always maintainable when it grows.
 
-Note that every plugin in the system maybe not bundled separatly but just a logical plugin. Below I give two cases to show the advantages of plugin based architecture.
+Every plugin in the system maybe not bundled separatly but just a logical plugin. Below two cases show the advantages of plugin based architecture.
 
 ## Example 1: Menu
 Menu is used to navigate among functions of an application. Whenever you add a new feature, it may need a menu item in the menu. Say that we have a menu component like below (from Github settings page):
