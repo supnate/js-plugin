@@ -3,6 +3,7 @@
   "version": "1.0.7",
   "repository": "rekit/js-plugin",
   "main": "plugin.js",
+  "types": "plugin.d.ts",
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },
@@ -10,7 +11,8 @@
     "test": "node test.js"
   },
   "files": [
-    "plugin.js"
+    "plugin.js",
+    "plugin.d.ts"
   ],
   "devDependencies": {
     "chai": "^4.2.0"
