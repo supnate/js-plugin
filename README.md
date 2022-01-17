@@ -4,6 +4,8 @@
 
 [js-plugin](https://www.npmjs.com/package/js-plugin) is a general and simple plugin engine for creating extensible and maintainable JavaScript applications for both browser and nodejs.
 
+[<img src="https://opencollective.com/rekit/tiers/backers.svg?avatarHeight=60"/>](https://opencollective.com/rekit)
+
 # Motivation
 Web applications are becoming more and more complicated nowadays. To separate concerns, decouple business logic, a large application should be well designed. One of best practices is plugin based architecture. Whenever you add a new feature, it should not add much complication to the system so that the project could be always maintainable when it grows.
 
