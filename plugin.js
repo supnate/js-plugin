@@ -106,16 +106,20 @@ module.exports = {
     var arr = prop.split('.');
     arr.pop();
     var obj = arr.join('.');
+    var isDebug = DEBUG_INVOKE;
     return this.getPlugins(prop).map(function(p) {
       var method = _get(p, prop);
       if (!_isFunc(method) || noCall) return method;
       try {
+        isDebug && console.debug('Before', p.name, obj, args);
         return method.apply(_get(p, obj), args);
       } catch (err) {
         // When a plugin failed, doesn't break the app
         console.log('Failed to invoke plugin: ' + p.name + '!' + prop);
         if (throws) throw err;
         else console.log(err);
+      } finally {
+        isDebug && console.debug('After', p.name, obj, args);
       }
       return null;
     });
