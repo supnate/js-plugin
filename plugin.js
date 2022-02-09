@@ -2,6 +2,18 @@ var _plugins = [];
 var _byName = {};
 var _cache = {};
 
+// Only support debug mode on browser and node, not web workers.
+var isBrowser =
+  typeof window !== "undefined" && typeof window.document !== "undefined";
+
+var isNode =
+  typeof process !== "undefined" &&
+  process.versions != null &&
+  process.versions.node != null;
+
+var isDebug = (isBrowser && document.location.search.includes('JS_PLUGIN_DEBUG'))
+    || (isNode && process.env && process.env.JS_PLUGIN_DEBUG);
+
 function _isFunc(o) {
   return !!(o.constructor && o.call && o.apply);
 }
@@ -106,16 +118,20 @@ module.exports = {
     var arr = prop.split('.');
     arr.pop();
     var obj = arr.join('.');
+    
     return this.getPlugins(prop).map(function(p) {
       var method = _get(p, prop);
       if (!_isFunc(method) || noCall) return method;
       try {
+        isDebug && console.log('Before', p.name, prop, args);
         return method.apply(_get(p, obj), args);
       } catch (err) {
         // When a plugin failed, doesn't break the app
         console.log('Failed to invoke plugin: ' + p.name + '!' + prop);
         if (throws) throw err;
         else console.log(err);
+      } finally {
+        isDebug && console.log('After ', p.name, prop, args);
       }
       return null;
     });
