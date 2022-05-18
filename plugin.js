@@ -3,16 +3,14 @@ var _byName = {};
 var _cache = {};
 
 // Only support debug mode on browser and node, not web workers.
-var isBrowser =
-  typeof window !== "undefined" && typeof window.document !== "undefined";
+var isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined';
 
 var isNode =
-  typeof process !== "undefined" &&
-  process.versions != null &&
-  process.versions.node != null;
+  typeof process !== 'undefined' && process.versions != null && process.versions.node != null;
 
-var isDebug = (isBrowser && document.location.search.includes('JS_PLUGIN_DEBUG'))
-    || (isNode && process.env && process.env.JS_PLUGIN_DEBUG);
+var isDebug =
+  (isBrowser && document.location.search.includes('JS_PLUGIN_DEBUG')) ||
+  (isNode && process.env && process.env.JS_PLUGIN_DEBUG);
 
 function _isFunc(o) {
   return !!(o.constructor && o.call && o.apply);
@@ -21,7 +19,7 @@ function _isFunc(o) {
 function _get(obj, prop) {
   var arr = prop.split('.');
   for (var i = 0; i < arr.length; i++) {
-    if (!obj.hasOwnProperty || !obj.hasOwnProperty(arr[i])) return undefined;
+    if (!(arr[i] in obj)) return undefined;
     obj = obj[arr[i]];
   }
   return obj;
@@ -30,7 +28,7 @@ function _get(obj, prop) {
 function _has(obj, prop) {
   var arr = prop.split('.');
   for (var i = 0; i < arr.length; i++) {
-    if (!obj.hasOwnProperty || !obj.hasOwnProperty(arr[i])) return false;
+    if (!(arr[i] in obj)) return undefined;
     obj = obj[arr[i]];
   }
   return true;
@@ -38,7 +36,7 @@ function _has(obj, prop) {
 
 module.exports = {
   config: {},
-  register: function(p) {
+  register: function (p) {
     if (!p.name) {
       console.log('Every plugin should have a name.');
       console.log(p);
@@ -62,7 +60,7 @@ module.exports = {
     }
   },
 
-  unregister: function(name) {
+  unregister: function (name) {
     var p = _byName[name];
     if (!p) throw new Error('Plugin "' + name + '" does\'t exist.');
     var i = _plugins.indexOf(p);
@@ -78,19 +76,19 @@ module.exports = {
     _plugins.splice(i, 1);
   },
 
-  getPlugin: function(name) {
+  getPlugin: function (name) {
     return _byName[name];
   },
 
-  getPlugins: function(prop) {
+  getPlugins: function (prop) {
     if (!prop) {
       prop = '.';
     }
     if (!_cache[prop]) {
-      _cache[prop] = _plugins.filter(p => {
-        if (p.deps && p.deps.some(dep => !_byName[dep])) {
+      _cache[prop] = _plugins.filter((p) => {
+        if (p.deps && p.deps.some((dep) => !_byName[dep])) {
           // If deps not exist, then not load it.
-          const notExistDeps = p.deps.filter(dep => !_byName[dep]);
+          const notExistDeps = p.deps.filter((dep) => !_byName[dep]);
           console.log(
             `Plugin ${p.name} is not loaded because its deps do not exist: ${notExistDeps}.`
           );
@@ -102,14 +100,14 @@ module.exports = {
     return _cache[prop];
   },
 
-  processRawPlugins: function(callback) {
+  processRawPlugins: function (callback) {
     // This method allows to process _plugins so that it could
     // do some unified pre-process before application starts.
     callback(_plugins);
     _cache = {};
   },
 
-  invoke: function(prop) {
+  invoke: function (prop) {
     var args = Array.prototype.slice.call(arguments, 1);
     if (!prop) throw new Error('Invoke on plugin should have prop argument');
     var noCall = /^!/.test(prop);
@@ -118,8 +116,8 @@ module.exports = {
     var arr = prop.split('.');
     arr.pop();
     var obj = arr.join('.');
-    
-    return this.getPlugins(prop).map(function(p) {
+
+    return this.getPlugins(prop).map(function (p) {
       var method = _get(p, prop);
       if (!_isFunc(method) || noCall) return method;
       try {
@@ -136,7 +134,7 @@ module.exports = {
       return null;
     });
   },
-  sort: function(arr, sortProp) {
+  sort: function (arr, sortProp) {
     // A helper method to sort an array according to 'order' (or by sortProp) property of the array element.
     sortProp = sortProp || 'order';
     arr.sort((a, b) => {
