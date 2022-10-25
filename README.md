@@ -1,6 +1,6 @@
 # Overview
 [![NPM](https://img.shields.io/npm/v/js-plugin.svg)](https://www.npmjs.com/package/js-plugin)
-[![Build Status](https://travis-ci.org/rekit/js-plugin.svg?branch=master)](https://travis-ci.org/rekit/js-plugin)
+[![Build Status](https://travis-ci.com/rekit/js-plugin.svg?branch=master)](https://travis-ci.com/rekit/js-plugin)
 
 [js-plugin](https://www.npmjs.com/package/js-plugin) is a general and simple plugin engine for creating extensible and maintainable JavaScript applications for both browser and nodejs.
 
