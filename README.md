@@ -344,17 +344,5 @@ plugin.sort(menuItems);
 ```
 The array is sorted by order property accendingly and if no order property it will be in the end.
 
-# Bundling
-In above examples, plugins are bundled together with the host application. But in real cases plugins maybe bundled separatly. Below is my recommended way:
-
-1. Build Webpack DLL to contain all main application modules.
-2. Build plugin on DLL. Its entry module just registers itself as an plugin.
-3. Build application on DLL.
-
-So the load sequence is:
-App DLL => Plugin-1 => Plugin-2 => ... => Plugin-n => App Bundle
-
-This way is how Rekit plugins work and also it's used in my componay projects. Just work well.
-
 # License
 MIT
