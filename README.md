@@ -9,7 +9,7 @@
 # Motivation
 Web applications are becoming more and more complicated nowadays. To separate concerns, decouple business logic, a large application should be well designed. One of best practices is plugin based architecture. Whenever you add a new feature, it should not add much complication to the system so that the project could be always maintainable when it grows.
 
-Every plugin in the system maybe not bundled separatly but just a logical plugin. Below two cases show the advantages of plugin based architecture.
+Every plugin in the system maybe not bundled separately but just a logical plugin. Below two cases show the advantages of plugin based architecture.
 
 ## Example 1: Menu
 Menu is used to navigate among functions of an application. Whenever you add a new feature, it may need a menu item in the menu. Say that we have a menu component like below (from Github settings page):
@@ -30,7 +30,7 @@ export default function Menu() {
 }
 ```
 
-Now we need to add a new feature to allow to block users. It needs a menu item named 'Blocked users' in settings page. Normallly we need to change `Menu` component:
+Now we need to add a new feature to allow to block users. It needs a menu item named 'Blocked users' in settings page. Normally we need to change `Menu` component:
 ```js
 return (
   <ul>
@@ -184,7 +184,7 @@ export default () => {
 };
 ```
 
-We can see we defined an extension point named `profile.processMeta` in `UserProfile` component, then we can comsume this extension point in a plugin:
+We can see we defined an extension point named `profile.processMeta` in `UserProfile` component, then we can consume this extension point in a plugin:
 
 ### plugin1.js
 ```js
@@ -214,7 +214,7 @@ Then we got the UI as below:
 
 <img src="./images/form2.png" width="700" />
 
-From above two examples, we see how we use `js-plugin` to keep all releated code in one place, whenever we add a new feature, we will not add complexity to either `Menu` or `UserProfile` component. That is we don't need to change `Menu` or `UserProfile` components.
+From above two examples, we see how we use `js-plugin` to keep all related code in one place, whenever we add a new feature, we will not add complexity to either `Menu` or `UserProfile` component. That is we don't need to change `Menu` or `UserProfile` components.
 
 You can see the live example at:
 
@@ -242,7 +242,7 @@ Then `menuItems` array can be filled by all plugins which contribute to `menu.pr
 
 Below is how plugin consume the extension point:
 ```js
-plugin.registry({
+plugin.register({
   name: 'samplePlugin',
   menu: {
     processMenuItems(items) {
@@ -289,10 +289,10 @@ const myPlugin = {
 # API Reference
 
 ### plugin.register(p)
-Register a plugin to the system. Normally you should register all plugins before your app is started. If you want to dynamically register plugin on demand, you need to ensure all extension points executed again. For example, you may want to `Menu` component force updated when new plugin registerred.
+Register a plugin to the system. Normally you should register all plugins before your app is started. If you want to dynamically register plugin on demand, you need to ensure all extension points executed again. For example, you may want to `Menu` component force updated when new plugin registered.
 
 ### plugin.unregister(name)
-Unregister a plugin. You may also need to ensure all UI re-renderred if necessary yourself.
+Unregister a plugin. You may also need to ensure all UI re-rendered if necessary yourself.
 
 ### plugin.getPlugin(name)
 Get the plugin instance by name. If your plugin want to export some reuseable utilities or API to other plugins, you can define it in plugin object, then other plugin can use `getPlugin` to get the plugin object and call its API.
@@ -306,9 +306,9 @@ Call extension point method from all plugins which support it and returns an arr
 
 For example:
 ```js
-plugin.registery({ name: 'p1', getMenuItem() { return 'item1'; }})
-plugin.registery({ name: 'p2', getMenuItem() { return 'item2'; }})
-plugin.registery({ name: 'p3', getMenuItem() { return 'item3'; }})
+plugin.register({ name: 'p1', getMenuItem() { return 'item1'; }})
+plugin.register({ name: 'p2', getMenuItem() { return 'item2'; }})
+plugin.register({ name: 'p3', getMenuItem() { return 'item3'; }})
 
 const items = plugin.invoke('getMenuItem');
 // items: ['p1', 'p2', 'p3']
@@ -316,8 +316,8 @@ const items = plugin.invoke('getMenuItem');
 
 If extension point is not a function, then use the value as return value. If you don't want to call the extension point but just collect all functions, you can use prefix the extension point with `!`, for example:
 ```js
-plugin.registery({ name: 'p1', rootComponent: () => <div>Hello</div>)
-plugin.registery({ name: 'p2', rootComponent: () => <div>Hello2</div>)
+plugin.register({ name: 'p1', rootComponent: () => <div>Hello</div>})
+plugin.register({ name: 'p2', rootComponent: () => <div>Hello2</div>})
 const rootComponents = plugin.invoke('!rootComponent');
 // rootComponents: [func1, func2]
 ```
